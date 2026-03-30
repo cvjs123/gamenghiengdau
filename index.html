@@ -1230,6 +1230,9 @@
           <button class="chip" onclick="selectPackage(5)" style="background:linear-gradient(135deg,#9f7aea,#b794f6);border:2px solid #6b46c1;cursor:pointer;padding:12px 20px;font-size:16px;">📌 5 Câu (9 điểm)</button>
           <button class="chip" onclick="selectPackage(10)" style="background:linear-gradient(135deg,#ed8936,#f6ad55);border:2px solid #c05621;cursor:pointer;padding:12px 20px;font-size:16px;">📌 10 Câu (10 điểm)</button>
         </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+          <button class="btn-blue" onclick="skipPackage()" style="padding:12px 20px;">⏭️ Bỏ Qua - Chơi Hết Tất Cả</button>
+        </div>
         <div class="small-note">Sai 1 câu = trừ 1 điểm<br/>Sai hết = 0 điểm</div>
       </div>
     </div>
@@ -1761,7 +1764,14 @@
 
       // Cập nhật điểm dự đoán
       const predictedScore = calculateScore(totalQuestions, correctCount);
-      document.getElementById("score").innerText = predictedScore;
+      const savedPackage = localStorage.getItem("selectedPackage");
+      let scoreDisplay = String(predictedScore);
+      if(savedPackage){
+        scoreDisplay = `${predictedScore} điểm`;
+      } else {
+        scoreDisplay = `${predictedScore}%`;
+      }
+      document.getElementById("score").innerText = scoreDisplay;
       updateQuestionCounter();
 
       setTimeout(() => {
@@ -2151,6 +2161,7 @@
     function openPackageModal(){
       gameEnded = false;
       gameStarted = false;
+      document.getElementById("score").innerText = "0";
       const m = document.getElementById("packageModal");
       if(!m) return;
       m.style.display = "flex";
@@ -2187,6 +2198,19 @@
       restartGame();
     }
 
+    function skipPackage(){
+      if(questions.length === 0){
+        alert("Không có câu hỏi!");
+        return;
+      }
+      // Xáo trộn câu hỏi
+      questions = shuffleArray(questions);
+      totalQuestions = questions.length; // Chơi hết tất cả
+      localStorage.removeItem("selectedPackage");
+      closePackageModal();
+      restartGame();
+    }
+
     function openFinishModal(){
       const m = document.getElementById("finishModal");
       if(!m) return;
@@ -2199,7 +2223,16 @@
       if(totalEl) totalEl.textContent = totalQuestions;
       
       const scoreEl = document.getElementById("finishScore");
-      if(scoreEl) scoreEl.textContent = finalScore;
+      if(scoreEl) {
+        const savedPackage = localStorage.getItem("selectedPackage");
+        if(savedPackage){
+          // Package mode: show điểm
+          scoreEl.textContent = `${finalScore} điểm`;
+        } else {
+          // Skip mode: show % độ chính xác
+          scoreEl.textContent = `${finalScore}% chính xác`;
+        }
+      }
       
       m.style.display = "flex";
       m.setAttribute("aria-hidden", "false");
@@ -2223,6 +2256,14 @@
     }
 
     function calculateScore(numQuestions, correctCount){
+      const savedPackage = localStorage.getItem("selectedPackage");
+      
+      // Nếu bỏ qua gói (chơi hết tất cả), tính % thay vì điểm
+      if(!savedPackage){
+        const percentage = Math.round((correctCount / numQuestions) * 100);
+        return percentage;
+      }
+      
       const maxScore = getMaxScore(numQuestions);
       const wrongCount = numQuestions - correctCount;
       // Nếu sai 1 câu trở lên = 0 điểm, chỉ trả lời đúng hết mới được điểm tối đa
