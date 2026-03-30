@@ -1,0 +1,36 @@
+[
+  {
+    "q": "Con vật này có cánh và có thể bay được",
+    "A": "Chim",
+    "B": "Cá",
+    "correct": "A",
+    "image": "https://files.catbox.moe/d00b0c.png"
+  },
+  {
+    "q": "Đây là quốc hoa của Việt Nam",
+    "A": "Hồng",
+    "B": "Sen",
+    "correct": "B",
+    "image": "https://files.catbox.moe/mwr854.jpg"
+  },
+  {
+    "q": "Câu hỏi có hình ảnh minh họa",
+    "A": "Đáp án A",
+    "B": "Đáp án B",
+    "correct": "A",
+    "image": "./images/sample.jpg"
+  },
+  {
+    "q": "Test JPG - có hiện không?",
+    "A": "Có",
+    "B": "Không",
+    "correct": "A",
+    "image": "./images/test.jpg"
+  },
+  {
+    "q": "Câu hỏi không có hình ảnh",
+    "A": "Đáp án A",
+    "B": "Đáp án B",
+    "correct": "A"
+  }
+]
