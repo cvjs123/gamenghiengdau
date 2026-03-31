@@ -2195,7 +2195,7 @@
       totalQuestions = numQuestions;
       localStorage.setItem("selectedPackage", numQuestions);
       closePackageModal();
-      restartGame();
+      // Không gọi restartGame() ở đây - chờ user bấn "Bắt Đầu"
     }
 
     function skipPackage(){
@@ -2208,7 +2208,7 @@
       totalQuestions = questions.length; // Chơi hết tất cả
       localStorage.removeItem("selectedPackage");
       closePackageModal();
-      restartGame();
+      // Không gọi restartGame() ở đây - chờ user bấn "Bắt Đầu"
     }
 
     function openFinishModal(){
